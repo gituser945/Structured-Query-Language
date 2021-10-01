@@ -210,6 +210,55 @@ GROUP BY ticker;
 /******************************* Step 4 - Transactions Table ***********************************/
 
 
+/*Question 1 - How many records are there in the trading.transactions table? */
+
+
+SELECT COUNT(*) AS total_records
+FROM trading.transactions;
+
+
+/*Question 2 - How many unique transactions are there? */
+
+
+SELECT DISTINCT(COUNT(*)) AS count_unique
+FROM trading.transactions;
+
+
+/* Question 3 - How many buy and sell transactions are there for Bitcoin? */
+
+
+SELECT txn_type,COUNT(*) AS count
+FROM trading.transactions
+WHERE ticker = 'BTC'
+GROUP BY txn_type;
+
+
+/* Question 4
+
+For each year, calculate the following buy and sell metrics for Bitcoin:
+total transaction count
+total quantity
+average quantity per transaction
+Also round the quantity columns to 2 decimal places. */
+
+
+SELECT EXTRACT(YEAR FROM txn_date) AS txn_year,txn_type,
+COUNT(txn_id) AS transaction_count,
+ROUND(SUM(quantity)::NUMERIC,2) AS total_quantity,
+ROUND(AVG(quantity)::NUMERIC,2) AS average_quantity
+FROM trading.transactions
+GROUP BY txn_year,txn_type
+ORDER BY txn_year,txn_type;
+
+
+/*Question 5 - What was the monthly total quantity purchased and sold for Ethereum in 2020? */
+
+SELECT txn_date,COUNT() AS total_quantity
+FROM trading.transactions
+WHERE ticker = 'ETH' AND EXTRACT(YEAR FROM txn_date) = '2020' 
+GROUP BY txn_date;
+
+SELECT *FROM trading.transactions;
 
 
 

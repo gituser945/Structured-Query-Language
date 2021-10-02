@@ -253,11 +253,54 @@ ORDER BY txn_year,txn_type;
 
 /*Question 5 - What was the monthly total quantity purchased and sold for Ethereum in 2020? */
 
-SELECT txn_date,COUNT() AS total_quantity
+SELECT DATE_TRUNC('MON', txn_date)::DATE AS calendar_month,
+SUM(CASE WHEN txn_type = 'BUY' THEN quantity ELSE 0 END) AS buy_quantity,
+SUM(CASE WHEN txn_type = 'SELL' THEN quantity ELSE 0 END) AS sell_quantity
 FROM trading.transactions
-WHERE ticker = 'ETH' AND EXTRACT(YEAR FROM txn_date) = '2020' 
-GROUP BY txn_date;
+WHERE txn_date BETWEEN '2020-01-01' AND '2020-12-31'
+GROUP BY calendar_month
+ORDER BY calendar_month;
 
+
+/* Question 6
+
+Summarise all buy and sell transactions for each member_id by generating 1 row for each member with the following additional columns:
+Bitcoin buy quantity
+Bitcoin sell quantity
+Ethereum buy quantity
+Ethereum sell quantity */
+
+SELECT member_id,
+	SUM(CASE WHEN txn_type = 'BUY' AND ticker = 'BTC' THEN quantity ELSE 0 END)  AS btc_buy_quantity,
+	SUM(CASE WHEN txn_type = 'SELL' AND ticker = 'BTC' THEN quantity ELSE 0 END) AS btc_sell_quantity,
+	SUM(CASE WHEN txn_type = 'BUY' AND ticker = 'ETH' THEN quantity ELSE 0 END) AS eth_buy_quantity,
+	SUM(CASE WHEN txn_type = 'SELL' AND ticker = 'ETH' THEN quantity ELSE 0 END) AS eth_sell_quantity
+FROM trading.transactions
+GROUP BY member_id;
+
+
+/* Question 7
+What was the final quantity holding of Bitcoin for each member? 
+Sort the output from the highest BTC holding to lowest */
+
+SELECT member_id,
+	SUM(
+		CASE 
+		WHEN txn_type = 'BUY' THEN quantity
+		WHEN txn_type = 'SELL' THEN -quantity
+		ELSE
+		0
+	END) AS final_btc_holding
+FROM trading.transactions
+WHERE ticker = 'BTC'
+GROUP BY member_id
+ORDER BY final_btc_holding DESC;
+
+
+
+
+	
+	
 SELECT *FROM trading.transactions;
 
 

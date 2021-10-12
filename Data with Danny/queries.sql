@@ -296,12 +296,42 @@ WHERE ticker = 'BTC'
 GROUP BY member_id
 ORDER BY final_btc_holding DESC;
 
+/* Question 8 - Which members have sold less than 500 Bitcoin? Sort the output from the most BTC sold to least */
+
+SELECT member_id,
+	SUM(quantity) AS btc_sold_quantity
+FROM trading.transactions
+WHERE ticker = 'BTC' AND txn_type = 'SELL'
+GROUP BY member_id
+HAVING SUM(quantity) < 500
+ORDER BY btc_sold_quantity DESC;
 
 
+/* Question 8
+What is the total Bitcoin quantity for each member_id owns after adding all of the BUY and SELL transactions 
+from the transactions table? Sort the output by descending total quantity */
 
-	
-	
-SELECT *FROM trading.transactions;
+
+SELECT member_id,
+	SUM(
+		CASE 
+		WHEN txn_type = 'BUY' THEN quantity
+		WHEN txn_type = 'SELL' THEN -quantity
+		END
+	   ) AS total_quantity
+FROM trading.transactions
+WHERE ticker = 'BTC'
+GROUP BY member_id
+ORDER BY total_quantity DESC;
+
+
+/* Question 10 - Which member_id has the highest buy to sell ratio by quantity? */
+
+SELECT member_id,
+	(SUM(CASE WHEN txn_type = 'BUY' THEN quantity END)/SUM(CASE WHEN txn_type = 'SELL' THEN quantity END)) AS buy_to_sell_ratio
+FROM trading.transactions
+GROUP BY member_id
+ORDER BY buy_to_sell_ratio DESC;
 
 
 

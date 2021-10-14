@@ -334,6 +334,70 @@ GROUP BY member_id
 ORDER BY buy_to_sell_ratio DESC;
 
 
+/********************************** Step 5 - Let the Data Analysis Begin! ********************************/
+
+
+/* Question 1 - What is the earliest and latest date of transactions for all members? */
+
+
+SELECT MIN(txn_date) AS earliest_date,
+MAX(txn_date) AS latest_date 
+FROM trading.transactions; 
+
+
+/* Question 2 - What is the range of market_date values available in the prices data? */
+
+
+SELECT MIN(market_date) AS earliest_date,
+	   MAX(market_date) AS recent_date
+FROM trading.prices;
+
+
+/* Question 3 - Which top 3 mentors have the most Bitcoin quantity as of the 29th of August? */
+
+
+SELECT members.first_name,
+SUM(CASE 
+	WHEN transactions.txn_type = 'BUY' THEN transactions.quantity
+   	WHEN transactions.txn_type = 'SELL' THEN -transactions.quantity
+   END) AS total_quantity 
+FROM trading.transactions
+INNER JOIN trading.members
+ON trading.members.member_id = trading.transactions.member_id
+WHERE ticker = 'BTC'
+GROUP BY members.first_name
+ORDER BY total_quantity DESC LIMIT 3;
+
+
+/* Question 4
+What is total value of all Ethereum portfolios for each region at the end date of our analysis? 
+Order the output by descending portfolio value */
+
+
+SELECT members.region,
+SUM(prices.price) AS etherum_value
+FROM trading.prices
+INNER JOIN trading.transactions
+ON trading.prices.ticker = trading.transactions.ticker
+INNER JOIN trading.members
+ON trading.members.member_id = trading.transactions.member_id
+WHERE transactions.ticker = 'ETH'
+GROUP BY members.region
+ORDER BY etherum_value DESC;
+
+
+SELECT *FROM trading.members;
+SELECT *FROM trading.transactions;
+SELECT *FROM trading.prices;
+
+
+
+
+
+
+
+
+
 
 
 

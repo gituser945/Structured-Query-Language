@@ -373,17 +373,69 @@ ORDER BY total_quantity DESC LIMIT 3;
 What is total value of all Ethereum portfolios for each region at the end date of our analysis? 
 Order the output by descending portfolio value */
 
-
+WITH cte_latest_price AS(
+	SELECT ticker,price
+	FROM trading.prices
+	WHERE ticker = 'ETH'
+	AND market_date = '2021-08-29'
+)
 SELECT members.region,
-SUM(prices.price) AS etherum_value
-FROM trading.prices
-INNER JOIN trading.transactions
-ON trading.prices.ticker = trading.transactions.ticker
+SUM(
+	CASE
+		WHEN transactions.txn_type = 'BUY' THEN transactions.quantity
+		WHEN transactions.txn_type = 'SELL' THEN -transactions.quantity
+	END
+		)* cte_latest_price.price AS etherum_value,
+AVG(
+	CASE
+		WHEN transactions.txn_type = 'BUY' THEN transactions.quantity
+		WHEN transactions.txn_type = 'SELL' THEN -transactions.quantity
+	END
+	)* cte_latest_price.price AS avg_etherum_value
+FROM trading.transactions
+INNER JOIN cte_latest_price
+ON cte_latest_price.ticker = transactions.ticker
 INNER JOIN trading.members
-ON trading.members.member_id = trading.transactions.member_id
+ON members.member_id = transactions.member_id
 WHERE transactions.ticker = 'ETH'
-GROUP BY members.region
-ORDER BY etherum_value DESC;
+GROUP BY members.region,cte_latest_price.price
+ORDER BY avg_etherum_value DESC;
+
+
+/* Question 5 -  What is the average value of each Ethereum portfolio in each region? 
+Sort this output in descending order */
+
+
+WITH cte_latest_price AS(
+	SELECT ticker,price
+	FROM trading.prices
+	WHERE ticker = 'ETH'
+	AND market_date = '2021-08-29'
+) 
+SELECT members.region,
+AVG(
+	CASE
+		WHEN transactions.txn_type = 'BUY' THEN transactions.quantity
+		WHEN transactions.txn_type = 'SELL' THEN -transactions.quantity
+	END
+	) * cte_latest_price.price AS avg_eth_value
+FROM trading.transactions
+INNER JOIN cte_latest_price
+ON transactions.ticker = cte_latest_price.ticker
+INNER JOIN trading.members
+ON members.member_id = transactions.member_id
+WHERE transactions.ticker = 'ETH'
+GROUP BY members.region,cte_latest_price.price
+ORDER BY avg_eth_value DESC;
+
+
+/* Let's try again - this time we will calculate the total sum of portfolio 
+value and then manually divide it by the total number of mentors in each region! */
+
+
+
+
+
 
 
 SELECT *FROM trading.members;

@@ -429,18 +429,56 @@ GROUP BY members.region,cte_latest_price.price
 ORDER BY avg_eth_value DESC;
 
 
-/* Let's try again - this time we will calculate the total sum of portfolio 
-value and then manually divide it by the total number of mentors in each region! */
+/*************************** Step 6 - Planning Ahead for Data Analysis *****************************/
+
+/* Question 1 - What is the total portfolio value for each mentor at the end of 2020? 
+Create a base table that has each mentor's name, region and end of year total quantity for each ticker */
+
+
+DROP TABLE IF EXISTS temp_portfolio;
+CREATE TEMP TABLE temp_portfolio AS
+WITH cte_joined_data AS(
+	SELECT
+		members.first_name,
+		members.region,
+		transactions.txn_date,
+		transactions.ticker,
+		CASE
+			WHEN transactions.txn_type = 'BUY' THEN transactions.quantity 
+			ELSE -transactions.quantity
+		END AS adj_quantity
+FROM trading.transactions
+INNER JOIN trading.members
+ON members.member_id = transactions.member_id
+WHERE transactions.txn_date <= '2020-12-31'
+)
+SELECT first_name,region,ticker,
+(DATE_TRUNC('YEAR',txn_date) + INTERVAL '12 MONTHS' - INTERVAL '1 DAY')::DATE as year_end,
+SUM(adj_quantity) AS final_quantity
+FROM cte_joined_data
+GROUP BY first_name,region,year_end,ticker;
+
+SELECT * FROM temp_portfolio;
+
+
+/* Question 2 - Let's take a look at our base table now to see what data we have to play with - to keep things simple, 
+let's take a look at Abe's data from our new temp table temp_portfolio_base */
+
+
+SELECT *FROM temp_portfolio WHERE first_name = 'Abe';
+
+
+/* Inspect the year_end, ticker and final_quantity values from our new temp table temp_portfolio_base for Mentor Abe only. 
+Sort the output with ordered BTC values followed by ETH values */
+
+
+SELECT year_end,ticker,final_quantity
+FROM temp_portfolio WHERE first_name = 'Abe'
+ORDER BY ticker,final_quantity DESC;
 
 
 
 
-
-
-
-SELECT *FROM trading.members;
-SELECT *FROM trading.transactions;
-SELECT *FROM trading.prices;
 
 
 

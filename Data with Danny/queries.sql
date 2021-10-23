@@ -468,13 +468,99 @@ let's take a look at Abe's data from our new temp table temp_portfolio_base */
 SELECT *FROM temp_portfolio WHERE first_name = 'Abe';
 
 
-/* Inspect the year_end, ticker and final_quantity values from our new temp table temp_portfolio_base for Mentor Abe only. 
+/* Question 3 - Inspect the year_end, ticker and final_quantity values from our new temp table temp_portfolio_base for Mentor Abe only. 
 Sort the output with ordered BTC values followed by ETH values */
 
 
 SELECT year_end,ticker,final_quantity
 FROM temp_portfolio WHERE first_name = 'Abe'
-ORDER BY ticker,final_quantity DESC;
+ORDER BY ticker,year_end
+
+
+/* Create a cumulative sum for Abe which has an independent value for each ticker */
+
+
+SELECT year_end,ticker,final_quantity,
+SUM(final_quantity) OVER (PARTITION BY ticker,first_name ORDER BY year_end
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+AS cumulative_sum
+FROM temp_portfolio
+WHERE first_name = 'Abe'
+ORDER BY year_end,ticker;
+
+
+/* Generate an additional cumulative_quantity column for the temp_portfolio_base temp table */
+
+ALTER TABLE temp_portfolio
+ADD cumulative_quantity NUMERIC;
+
+UPDATE temp_portfolio
+SET(cumulative_quantity) =
+(SELECT SUM(final_quantity) OVER (PARTITION BY first_name,ticker
+ORDER BY year_end
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW))
+
+
+/* Now let's check that our updates to the temp table worked by inspecting Abe's records again! */
+
+
+SELECT year_end,ticker,
+final_quantity,cumulative_quantity
+FROM temp_portfolio 
+WHERE first_name = 'Abe'
+ORDER BY ticker,year_end;
+
+
+/* Wait a moment....it didn't work - the cumulative and the yearly quantity is exactly the same!
+This is because our UPDATE step only takes into account a single row at a time, 
+which is exactly what we must not do with our window functions!
+We will need to create an additional temp table with our cumulative sum instead!
+You must run this step for all following queries to work! */
+
+
+DROP TABLE IF EXISTS temp_portfolio_base;
+CREATE TEMP TABLE temp_portfolo_base AS
+SELECT first_name,
+	   region,
+	   ticker,
+	   year_end,
+	   final_quantity,
+SUM(final_quantity) OVER (PARTITION BY first_name,ticker
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_quantity
+FROM temp_portfolio;
+	   
+
+SELECT *FROM temp_portfolo_base LIMIT 20;
+
+
+SELECT year_end,ticker,
+final_quantity,cumulative_quantity
+FROM temp_portfolo_base 
+WHERE first_name = 'Abe'
+ORDER BY ticker,year_end;
+
+
+/************************************* Step 7 - Answering Data Questions *********************************/
+
+/* Question 1 - What is the total portfolio value for each mentor at the end of 2020? */
+
+SELECT temp_portfolo_base.first_name,
+SUM(
+	CASE WHEN prices.price = 'BUY' THEN transactions.quantity
+		 WHEN transactions.txn_type = 'SELL' THEN -transactions.quantity
+	END	
+)AS portfolio_value
+FROM trading.
+
+
+SELECT *FROM temp_portfolo_base;
+SELECT *FROM trading.transactions
+SELECT *FROM trading.prices
+
+
+
+
+
 
 
 

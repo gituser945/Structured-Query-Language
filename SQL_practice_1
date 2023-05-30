@@ -1,0 +1,43 @@
+/*------------------------ DAY 1 --------------------------*/
+
+/* Query to drop database */
+
+DROP DATABASE SlimeStore;
+
+/* Query to select current database */
+
+USE pet_shop;
+
+/* Query to check selected database */
+
+SELECT DATABASE();
+
+/* Query to create database */
+
+CREATE DATABASE tes_shop;
+
+/* Query to select current database */
+
+USE tes_shop;
+
+/* Query to create table */
+
+CREATE TABLE tweet (
+  username VARCHAR(15),
+  tweet_content VARCHAR(140),
+  number_of_favorites INT
+);
+
+/* Query to see all table in selected database */
+
+SHOW TABLES;
+
+USE tes_shop;
+
+/* Show columns name from table */
+
+SHOW COLUMNS FROM tweet;
+
+/* shorter version */
+
+DESC tweet;

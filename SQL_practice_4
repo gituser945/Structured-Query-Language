@@ -1,0 +1,27 @@
+/*----------------------- DAY 5 --------------------------*/
+
+-- Exercise
+
+UPDATE cats SET name = 'Jack' WHERE name = 'Jackson';
+
+UPDATE cats SET breed = 'British Shorthair' WHERE name = 'Ringo';
+
+UPDATE cats SET age = 12 WHERE breed = 'Maine Coon';
+
+SELECT * FROM cats;
+
+-- DELETE in SQL
+
+DELETE FROM cats WHERE name = 'Egg';
+
+-- to delete all rows at once 
+
+DELETE FROM cats;
+
+-- Excercise
+
+DELETE FROM cats WHERE age = 4;
+
+DELETE FROM cats WHERE age = cat_id;
+
+SELECT * FROM cats;

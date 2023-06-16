@@ -1,0 +1,131 @@
+/*----------------------- DAY 7 --------------------------*/
+
+-- STRING Functions
+
+-- CONCAT function 
+
+SELECT 4+1;
+
+SELECT CONCAT('H','e','l','l','o');
+
+CREATE DATABASE book_shop;
+
+USE book_shop;
+
+SHOW TABLES;
+
+CREATE TABLE books 
+	(
+		book_id INT AUTO_INCREMENT,
+		title VARCHAR(100),
+		author_fname VARCHAR(100),
+		author_lname VARCHAR(100),
+		released_year INT,
+		stock_quantity INT,
+		pages INT,
+		PRIMARY KEY(book_id)
+	);
+
+
+INSERT INTO books (title, author_fname, author_lname, released_year, stock_quantity, pages)
+VALUES  ('The Namesake', 'Jhumpa', 'Lahiri', 2003, 32, 291),
+        ('Norse Mythology', 'Neil', 'Gaiman',2016, 43, 304),
+        ('American Gods', 'Neil', 'Gaiman', 2001, 12, 465),
+        ('Interpreter of Maladies', 'Jhumpa', 'Lahiri', 1996, 97, 198),
+        ('A Hologram for the King: A Novel', 'Dave', 'Eggers', 2012, 154, 352),
+        ('The Circle', 'Dave', 'Eggers', 2013, 26, 504),
+        ('The Amazing Adventures of Kavalier & Clay', 'Michael', 'Chabon', 2000, 68, 634),
+        ('Just Kids', 'Patti', 'Smith', 2010, 55, 304),
+        ('A Heartbreaking Work of Staggering Genius', 'Dave', 'Eggers', 2001, 104, 437),
+        ('Coraline', 'Neil', 'Gaiman', 2003, 100, 208),
+        ('What We Talk About When We Talk About Love: Stories', 'Raymond', 'Carver', 1981, 23, 176),
+        ("Where I'm Calling From: Selected Stories", 'Raymond', 'Carver', 1989, 12, 526),
+        ('White Noise', 'Don', 'DeLillo', 1985, 49, 320),
+        ('Cannery Row', 'John', 'Steinbeck', 1945, 95, 181),
+        ('Oblivion: Stories', 'David', 'Foster Wallace', 2004, 172, 329),
+        ('Consider the Lobster', 'David', 'Foster Wallace', 2005, 92, 343);
+
+SELECT * FROM books;
+
+DESC books;
+
+-- concate with sign at end
+
+SELECT CONCAT(author_fname,'!!!') FROM books;
+
+-- Concat with space
+
+SELECT CONCAT (author_fname,author_lname) FROM books;
+
+-- Concat with spaces
+
+SELECT CONCAT (author_fname,' ',author_lname) AS full_name FROM books;
+
+-- concat with seperator
+
+SELECT CONCAT_WS('!','hello','bro');
+
+SELECT CONCAT_WS(' ',author_fname,author_lname) AS author_name FROM books;
+
+-- SUBSTRING
+
+-- printing from one to 4 character
+
+SELECT SUBSTRING('Hello World',1,4);
+
+-- start with the number till the end 
+
+SELECT SUBSTRING('Hello World',7);
+
+-- negative number to start from last 
+
+SELECT SUBSTRING('Hello World',-3);
+
+SELECT SUBSTRING('Hello World',-3,1);
+
+SELECT title FROM books;
+
+SELECT SUBSTRING(title,1,15) FROM books;
+
+-- shorter version 
+
+SELECT SUBSTR (title,1,5) FROM books;
+
+-- first character of the authors last name from every book
+
+SELECT * FROM books;
+
+SELECT SUBSTR(author_lname,1,1) FROM books;
+
+-- title concatendated with substring
+
+SELECT CONCAT(SUBSTRING(title,1,15),'...') AS short_title FROM books;
+
+SELECT CONCAT_WS('.',SUBSTRING(author_fname,1,1),SUBSTRING(author_lname,1,1)) AS initials FROM books;
+
+-- Replace functions 
+
+SELECT REPLACE ('Hello World','Hell','Hey');
+
+-- Replace all tile space with hyphen 
+
+SELECT title FROM books;
+
+SELECT REPLACE(title,' ','-') FROM books;
+
+-- REVERSE function 
+
+SELECT REVERSE("Hello World");
+
+SELECT REVERSE(author_fname) FROM books;
+
+-- CHAR_LENGTH function 
+
+SELECT LENGTH("Hello World");
+
+SELECT CHAR_LENGTH("Hello World");
+
+SELECT CHAR_LENGTH (title),title FROM books;
+
+
+

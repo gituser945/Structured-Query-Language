@@ -1,0 +1,65 @@
+/*----------------------- DAY 8 --------------------------*/
+
+-- UPPER
+
+SELECT UPPER("Hello");
+
+SELECT UCASE("hello");
+
+SELECT LOWER ("GDSFDfdfDGVDFGDFDGD");
+
+SELECT LCASE("fFGJDSNGJDSNVDFKNGMDSFPIKMB");
+
+USE book_shop;
+
+SELECT * FROM books;
+
+SELECT title FROM books;
+
+SELECT CONCAT('I LOVE',' ',UCASE(title),'!!!') FROM books;
+
+-- INSERT string 
+
+SELECT INSERT ('Hello Nick',6,0,'There');
+
+-- LEFT character 
+
+SELECT LEFT('fibbonacci',3);
+
+-- RIGHT character
+
+SELECT RIGHT ('omglol',3);
+
+-- REPEAT 
+
+SELECT REPEAT ('mySQL',3);
+
+-- TRIM 
+
+SELECT ('           haha');
+
+SELECT TRIM('      haha  ');
+
+SELECT TRIM(LEADING 'x' FROM 'xmutant');
+
+SELECT TRIM(TRAILING 'x' FROM 'xxxxxxxmutantxxxxxxxx');
+
+SELECT TRIM(BOTH 'x' FROM 'xxxxxxmutantxxxxxxx');
+
+-- Exercise
+
+SELECT REVERSE(UCASE('Why does my cat look at me with such hatred?')) AS reversed;
+
+SELECT REPLACE(title,' ','->') AS title FROM books;
+
+SELECT author_lname AS forward,REVERSE(author_lname) AS backwards FROM books;
+
+SELECT CONCAT(UCASE(author_fname),' ',UCASE(author_lname)) AS 'full name in caps' FROM books;
+
+SELECT CONCAT(title,' was released in ',released_year) AS blurb FROM books;
+
+SELECT title,LENGTH(title) AS 'character count' FROM books;
+
+SELECT CONCAT(SUBSTRING(title,1,10),'...') AS 'short title',
+       CONCAT(author_lname,',',author_fname) AS author,
+       CONCAT(stock_quantity,' in stock') AS quantity FROM books;

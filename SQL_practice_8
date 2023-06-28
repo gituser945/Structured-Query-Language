@@ -1,0 +1,130 @@
+/*----------------------- DAY 9 --------------------------*/
+
+USE book_shop;
+
+SELECT * FROM books;
+
+INSERT INTO books
+    (title, author_fname, author_lname, released_year, stock_quantity, pages)
+    VALUES ('10% Happier', 'Dan', 'Harris', 2014, 29, 256), 
+           ('fake_book', 'Freida', 'Harris', 2001, 287, 428),
+           ('Lincoln In The Bardo', 'George', 'Saunders', 2017, 1000, 367);
+           
+-- DISTINCT
+
+SELECT author_lname FROM books;
+
+SELECT DISTINCT(author_lname) FROM books;
+
+SELECT DISTINCT author_lname FROM books;
+
+SELECT released_year FROM books;
+
+SELECT DISTINCT released_year FROM books;
+
+SELECT author_fname,author_lname FROM books;
+
+SELECT DISTINCT CONCAT(author_fname,' ',author_lname) AS 'author full name' FROM books;
+
+SELECT DISTINCT author_fname,author_lname FROM books;
+
+SELECT DISTINCT author_fname,author_lname,released_year FROM books;
+
+-- ORDER BY 
+
+SELECT book_id,title,author_fname FROM books
+ORDER BY book_id DESC;
+
+SELECT book_id,title,author_fname FROM books
+ORDER BY author_fname;
+
+SELECT title,pages FROM books ORDER BY pages;
+
+SELECT title,pages FROM books ORDER BY pages DESC;
+
+-- ORDER BY shorthand
+
+-- order by 1st column which is title here 
+
+SELECT title,pages FROM books ORDER BY 1;
+
+-- order by 2nd column which is pages here 
+
+SELECT title,pages FROM books ORDER BY 2;
+
+-- ORDER BY multiple columns 
+
+SELECT author_lname,released_year,title  FROM books 
+ORDER BY author_lname;
+
+SELECT author_lname,released_year,title  FROM books 
+ORDER BY author_lname,released_year;
+
+SELECT author_lname,released_year,title  FROM books 
+ORDER BY author_lname,released_year,title;
+
+SELECT author_lname,released_year,title  FROM books 
+ORDER BY author_lname,released_year DESC;
+
+-- LIMIT 
+
+SELECT author_lname,title FROM books LIMIT 5;
+
+SELECT book_id,title,released_year FROM books
+ORDER BY released_year LIMIT 5;
+
+SELECT book_id,title,released_year FROM books
+ORDER BY book_id LIMIT 5,10;
+
+-- LIKE operator 
+
+SELECT * FROM books;
+
+SELECT title,author_fname,author_lname 
+FROM books 
+WHERE author_fname LIKE '%da%';
+
+SELECT title,author_fname,author_lname 
+FROM books 
+WHERE author_fname LIKE 'da%';
+
+SELECT title,author_fname,author_lname 
+FROM books 
+WHERE author_fname LIKE '%da';
+
+-- give exact 4 character author names
+
+SELECT * FROM books WHERE author_fname LIKE '____';
+
+SELECT * FROM books WHERE author_fname LIKE 'D___';
+
+SELECT * FROM books WHERE author_fname LIKE 'J___';
+
+SELECT * FROM books WHERE author_fname LIKE '_a__';
+
+SELECT * FROM books WHERE author_fname LIKE '%n';
+
+SELECT * FROM books WHERE title LIKE '%\%%';
+
+SELECT * FROM books WHERE title LIKE '%\_%';
+
+-- Exercise
+
+SELECT title FROM books WHERE title LIKE '%:%';
+
+SELECT title,pages FROM books ORDER BY pages DESC LIMIT 1;
+
+SELECT CONCAT(title,' - ',released_year) AS summary FROM books 
+ORDER BY released_year DESC LIMIT 3;
+
+SELECT title,author_lname FROM books
+WHERE author_lname LIKE '% %';
+
+SELECT title,released_year,stock_quantity FROM books ORDER BY stock_quantity LIMIT 3;
+
+SELECT title,author_lname FROM books
+ORDER BY author_lname,title;
+
+SELECT CONCAT(UCASE('my favorite author is '),UCASE(author_fname),' ',UCASE(author_lname),'!') AS yell 
+FROM books
+ORDER BY author_lname;

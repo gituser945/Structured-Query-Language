@@ -1,0 +1,64 @@
+/*----------------------- DAY 10 --------------------------*/
+
+USE book_shop;
+
+-- count number of rows 
+
+SELECT COUNT(*) FROM books;
+
+SELECT COUNT(author_fname) FROM books;
+
+INSERT INTO books () VALUES ();
+INSERT INTO books () VALUES ();
+
+SELECT * FROM books;
+
+SELECT COUNT(*) FROM books;
+
+SELECT COUNT(author_fname) FROM books;
+
+SELECT COUNT(DISTINCT author_fname) FROM books;
+
+SELECT DISTINCT author_fname FROM books;
+
+SELECT COUNT(title) FROM books WHERE title LIKE '%the%';
+
+SELECT COUNT(*) FROM books WHERE title LIKE '%the%';
+
+SELECT title FROM books WHERE title LIKE '%the%';
+
+-- GROUP BY 
+
+-- check how many rows exists within each group 
+
+SELECT author_lname,COUNT(*) FROM books
+GROUP BY author_lname;
+
+SELECT author_lname,COUNT(*) AS book_written FROM books
+GROUP BY author_lname
+ORDER BY book_written DESC;
+
+-- grouping by year 
+
+SELECT released_year,COUNT(*) AS count_of_books FROM books
+GROUP BY released_year
+ORDER BY count_of_books DESC;
+
+-- MIN and MAX 
+
+-- find the minimum released year 
+
+SELECT MIN(released_year) FROM books;
+
+SELECT MAX(pages) FROM books;
+
+SELECT MIN(author_lname),MAX(author_lname) FROM books;
+
+SELECT MAX(pages) FROM books;
+
+SELECT title,pages FROM books ORDER BY pages DESC LIMIT 1;
+
+-- sub queries 
+
+SELECT title,pages FROM books
+WHERE pages = (SELECT MAX(pages) FROM books);

@@ -1,0 +1,54 @@
+
+/*----------------------- DAY 11 --------------------------*/
+
+SELECT title,pages FROM books
+WHERE pages = (SELECT MAX(pages) FROM books);
+
+INSERT INTO books (title,pages) VALUES ('my life in words',634);
+
+SELECT title,pages FROM books ORDER BY pages DESC LIMIT 1;
+
+SELECT title,released_year FROM books
+WHERE released_year = (SELECT MIN(released_year) FROM books);
+
+-- GROUP BY multiple columns
+
+SELECT author_fname,author_lname FROM books ORDER BY author_lname;
+
+SELECT author_lname,COUNT(*) FROM books GROUP BY author_lname,author_fname;
+
+SELECT author_lname,author_fname,COUNT(*) FROM books GROUP BY author_lname,author_fname;
+
+SELECT CONCAT(author_fname,' ',author_lname) AS full_name,COUNT(*)
+FROM books GROUP BY full_name;
+
+-- MIN and MAX with GROUP BY 
+
+SELECT CONCAT(author_fname,' ',author_lname) AS full_name,MIN(released_year)
+FROM books GROUP BY full_name;
+
+SELECT CONCAT(author_fname,' ',author_lname) AS full_name,MAX(released_year)
+FROM books GROUP BY full_name;
+
+SELECT CONCAT(author_fname,' ',author_lname) AS full_name,MIN(released_year),MAX(released_year)
+FROM books GROUP BY full_name;
+
+SELECT CONCAT(author_fname,' ',author_lname) AS full_name,
+COUNT(*) AS books_written,
+MIN(released_year),
+MAX(released_year)
+FROM books GROUP BY full_name;
+
+SELECT CONCAT(author_fname,' ',author_lname) AS full_name,
+COUNT(*) AS books_written,
+MIN(released_year) AS first_book,
+MAX(released_year) AS latest_book,
+MAX(pages) AS longest_books
+FROM books GROUP BY full_name;
+
+-- SUM 
+
+SELECT SUM(pages) FROM books;
+
+SELECT author_lname,SUM(pages) FROM books
+GROUP BY author_lname;

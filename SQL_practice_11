@@ -1,0 +1,51 @@
+/*----------------------- DAY 12 --------------------------*/
+
+-- AVG 
+
+USE book_shop;
+
+SELECT AVG(released_year) FROM books;
+
+SELECT AVG(pages) FROM books;
+
+SELECT AVG(stock_quantity) FROM books;
+
+SELECT released_year,AVG(stock_quantity),COUNT(*) FROM books 
+GROUP BY released_year;
+
+-- Exercise 
+
+-- total number of books in database
+
+SELECT COUNT(*) AS total_books FROM books;
+
+-- books released every year 
+
+SELECT released_year,COUNT(*) AS total_books FROM books
+GROUP BY released_year;
+
+-- total books in stock 
+
+SELECT SUM(stock_quantity) AS total_books_in_stock 
+FROM books;
+
+SELECT CONCAT(author_fname,' ',author_lname) AS author,AVG(released_year)
+FROM books GROUP BY author;
+
+-- author name who wrote longest books
+
+SELECT CONCAT(author_fname,' ',author_lname) AS author_name,MAX(pages) AS page_count
+FROM books
+GROUP BY author_name
+HAVING author_name IS NOT NULL
+ORDER BY page_count DESC
+LIMIT 1;
+
+SELECT CONCAT(author_fname,' ',author_lname) AS author_name FROM books
+WHERE pages = (SELECT MAX(pages) FROM books);
+
+SELECT released_year AS 'year',COUNT(*) AS books,AVG(pages) AS avg_pages
+FROM books 
+GROUP BY released_year
+HAVING released_year IS NOT NULL
+ORDER BY released_year;

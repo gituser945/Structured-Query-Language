@@ -1,0 +1,62 @@
+/*----------------------- DAY 13 --------------------------*/
+
+-- Date format
+
+USE book_shop;
+
+CREATE TABLE people 
+(
+    name VARCHAR(100),
+    birthdate DATE,
+    birthtime TIME,
+    birthdt DATETIME
+);
+
+DESCRIBE people;
+
+INSERT INTO people (name,birthdate,birthtime,birthdt) 
+VALUES ('Tom','1992-01-21','11:49:00','1992-01-21 11:49:00');
+
+INSERT INTO people (name,birthdate,birthtime,birthdt) 
+VALUES ('Dick','1995-12-21','01:00:00','1995-12-21 01:00:00');
+
+INSERT INTO people (name,birthdate,birthtime,birthdt) 
+VALUES ('Harry','1989-01-01','12:59:00','1989-01-01 12:59:00');
+
+SELECT * FROM people;
+
+SELECT CURTIME();
+
+SELECT NOW();
+
+SELECT CURDATE();
+
+SELECT CURRENT_TIME();
+
+INSERT INTO people (name,birthdate,birthtime,birthdt) 
+VALUES ('Sejal',CURDATE(),CURTIME(),NOW());
+
+SELECT birthdate,DAY(birthdate) FROM people;
+
+SELECT birthdate,DAYOFWEEK(birthdate) FROM people;
+
+SELECT birthdate,DAYOFYEAR(birthdate) FROM people;
+
+SELECT birthdate,DAY(birthdate),DAYOFWEEK(birthdate),DAYOFYEAR(birthdate),
+MONTHNAME(birthdate),YEAR(birthdate) FROM people;
+
+-- TIME 
+
+SELECT name,birthtime,HOUR(birthtime) FROM people;
+
+SELECT name,birthtime,MINUTE(birthtime) FROM people;
+
+SELECT name,birthtime,SECOND(birthtime) FROM people;
+
+SELECT name,birthdt,HOUR(birthdt) FROM people;
+
+SELECT name,birthdt,MINUTE(birthdt) FROM people;
+
+SELECT name,birthdt,SECOND(birthdt) FROM people;
+
+SELECT name,birthdt,DATE(birthdt),TIME(birthdt) FROM people;

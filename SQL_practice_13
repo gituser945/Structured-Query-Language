@@ -1,0 +1,56 @@
+/*----------------------- DAY 14 --------------------------*/
+
+-- DATE FORMAT 
+
+SELECT CONCAT(MONTHNAME(birthdt),' ',DAY(birthdt),' ',YEAR(birthdt)) FROM people;
+
+SELECT DATE_FORMAT (birthdt,'%a %b %e') FROm people;
+
+-- DATEDIFF
+
+SELECT birthdate,DATEDIFF(CURDATE(),birthdate) AS difference FROM people;
+
+SELECT birthdate,DATE_ADD(birthdate,INTERVAL 1 DAY) FROM People;
+
+SELECT birthdate,DATE_ADD(birthdate,INTERVAL 1 YEAR) FROM People;
+
+-- DATE_SUB
+
+SELECT birthdate,DATE_SUB(birthdate,INTERVAL 1 DAY) FROM People;
+
+SELECT birthdate,DATE_SUB(birthdate,INTERVAL 1 YEAR) FROM People;
+
+CREATE TABLE captions (
+  text VARCHAR(150),
+  created_at TIMESTAMP default CURRENT_TIMESTAMP
+);
+ 
+CREATE TABLE captions2 (
+  text VARCHAR(150),
+  created_at TIMESTAMP default CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+SELECT CURTIME();
+
+SELECT CURDATE();
+
+SELECT NOW();
+
+SELECT DAYOFWEEK(CURDATE());
+
+SELECT DAY(CURDATE());
+
+SELECT DATE_FORMAT(NOW(),'%m/%d/%Y');
+
+SELECT DATE_FORMAT(NOW(),'%M %D at %h:%m');
+
+CREATE TABLE tweet (
+  tweet VARCHAR(150),
+  username VARCHAR(50),
+  created_at TIMESTAMP default CURRENT_TIMESTAMP
+);
+
+INSERT INTO tweet (tweet,username) VALUES ('this is amazng','@nikhiltweetzzz');
+
+SELECT * FROM tweet;

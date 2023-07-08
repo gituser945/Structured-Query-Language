@@ -1,0 +1,141 @@
+/*----------------------- DAY 15 --------------------------*/
+
+-- Logical operator
+
+USE book_shop;
+
+SELECT title,released_year FROM books WHERE released_year != '2017';
+
+-- NOT LIKE operator 
+
+SELECT title FROM books WHERE title NOT LIKE '% %';
+
+-- Greater than 
+
+SELECT * FROM books WHERE released_year > '2000';
+
+-- Less than 
+
+SELECT * FROM books WHERE released_year < '2000';
+
+-- Logical AND 
+
+SELECT * FROM books WHERE released_year = '1989' AND '1992';
+
+SELECT * FROM books WHERE author_lname = 'eggers' AND released_year > 2010;
+
+-- OR 
+
+SELECT * FROM books WHERE author_lname = 'eggers' AND released_year > 2010;
+
+-- BETWEEN 
+
+SELECT * FROM books WHERE released_year BETWEEN 2004 AND 2015;
+
+-- NOT BETWEEN
+
+SELECT * FROM books WHERE released_year NOT BETWEEN 2004 AND 2015;
+
+-- CAST 
+
+SELECT CAST('09:00:00' AS TIME);
+
+SELECT * FROM people WHERE HOUR(birthtime) BETWEEN 12 AND 16;
+
+-- IN 
+
+SELECT * FROM books WHERE released_year IN ('2005','2010');
+
+-- NOT IN 
+
+SELECT * FROM books WHERE released_year NOT IN ('2005','2010');
+
+SELECT * FROM books WHERE released_year % 2 != 0;
+
+-- CASE Statement 
+
+SELECT title,released_year,
+    CASE
+        WHEN released_year > 2000 THEN 'Modern'
+        ELSE '20th Century'
+    END AS genre
+FROM books;
+
+SELECT title,stock_quantity,
+    CASE 
+        WHEN stock_quantity BETWEEN 0 AND 50 THEN '*'
+        WHEN stock_quantity BETWEEN 51 AND 100 THEN '**'
+        ELSE '***'
+    END AS star_ratings
+FROM books;
+
+-- IS NULL 
+
+SELECT * FROM books WHERE author_lname IS NULL;
+
+-- IS NOT NULL
+
+SELECT * FROM books WHERE author_lname IS NOT NULL;
+
+-- Excercise
+
+SELECT * FROM books WHERE released_year < 1980;
+
+SELECT * FROM books WHERE author_lname = 'eggers' OR 'chabon';
+
+SELECT * FROM books WHERE released_year < 1980;
+ 
+SELECT * FROM books 
+WHERE author_lname = 'Eggers'
+OR author_lname = 'Chabon';
+ 
+SELECT * FROM books
+WHERE author_lname = 'Lahiri'
+AND released_year > 2000;
+ 
+SELECT * FROM books
+WHERE pages >= 100 
+AND pages <= 200;
+ 
+SELECT * FROM books
+WHERE pages BETWEEN 100 and 200;
+ 
+SELECT title, author_lname FROM books
+WHERE author_lname LIKE 'C%'
+OR author_lname LIKE 'S%';
+ 
+SELECT title, author_lname
+FROM books WHERE SUBSTR(author_lname, 1, 1) in ('C', 'S');
+ 
+SELECT title, author_lname,
+CASE
+    WHEN title LIKE '%stories%' THEN 'Short Stories'
+    WHEN title = 'Just Kids' THEN 'Memoir' 
+    WHEN title = 'A Heartbreaking Work of Staggering Genius' THEN 'Memior'
+    ELSE 'Novel'
+END AS type
+FROM books;
+ 
+ 
+SELECT author_fname, author_lname,
+	CASE
+        WHEN COUNT(*) = 1 THEN '1 book'
+        ELSE CONCAT(COUNT(*), ' books')
+	END AS count
+FROM books
+WHERE author_lname IS NOT NULL
+GROUP BY author_fname, author_lname;
+
+-- UNIQUE constraints 
+
+CREATE TABLE contacts (
+	name VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) NOT NULL UNIQUE
+);
+ 
+INSERT INTO contacts (name, phone)
+VALUES ('billybob', '8781213455');
+ 
+-- This insert would result in an error:
+INSERT INTO contacts (name, phone)
+VALUES ('billybob', '8781213455');

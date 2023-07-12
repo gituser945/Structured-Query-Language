@@ -1,0 +1,102 @@
+
+/*----------------------- DAY 20 --------------------------*/
+
+-- OVER and PARTITION BY
+
+SELECT * FROM employees;
+
+SELECT department,AVG(salary) FROM employees
+GROUP BY department;
+
+SELECT department,salary,AVG(salary) OVER (PARTITION BY department) FROM employees;
+
+SELECT department,salary,
+MIN(salary) OVER(),
+MAX(salary) OVER(),
+AVG(salary) OVER()
+FROM employees;
+
+SELECT department,salary,
+MIN(salary) OVER(PARTITION BY department) AS minimum_salary,
+MAX(salary) OVER(PARTITION BY department) AS maximum_salary,
+AVG(salary) OVER(PARTITION BY department) AS average_salary
+FROM employees;
+
+-- ORDER BY in OVER 
+
+SELECT department,salary,
+SUM(salary) OVER(PARTITION BY department ORDER BY salary) AS rolling_salary,
+SUM(salary) OVER(PARTITION BY department) AS total_dept_salary
+FROM employees;
+
+SELECT department,salary,
+SUM(salary) OVER(PARTITION BY department ORDER BY salary DESC) AS rolling_salary,
+SUM(salary) OVER(PARTITION BY department) AS total_dept_salary
+FROM employees;
+
+-- RANK() functions 
+
+SELECT emp_no,department,salary,
+RANK() OVER(ORDER BY salary DESC) AS ranking
+FROM employees;
+
+SELECT emp_no,department,salary,
+RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_ranking,
+RANK() OVER(ORDER BY salary DESC) AS overall_ranking
+FROM employees;
+
+SELECT emp_no,department,salary,
+RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_ranking,
+RANK() OVER(ORDER BY salary DESC) AS overall_ranking
+FROM employees ORDER BY department;
+
+SELECT emp_no,department,salary,
+ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary) AS dept_row_number,
+RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_ranking,
+RANK() OVER(ORDER BY salary DESC) AS overall_ranking
+FROM employees ORDER BY department;
+
+-- DENSE RANK 
+
+SELECT emp_no,department,salary,
+ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary) AS dept_row_number,
+DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_ranking,
+RANK() OVER(ORDER BY salary DESC) AS overall_ranking
+FROM employees ORDER BY department;
+
+
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    ROW_NUMBER() OVER(PARTITION BY department ORDER BY SALARY DESC) as dept_row_number,
+    RANK() OVER(PARTITION BY department ORDER BY SALARY DESC) as dept_salary_rank,
+    RANK() OVER(ORDER BY salary DESC) as overall_rank,
+    DENSE_RANK() OVER(ORDER BY salary DESC) as overall_dense_rank,
+    ROW_NUMBER() OVER(ORDER BY salary DESC) as overall_num
+FROM employees ORDER BY overall_rank;
+
+-- NTILE 
+
+SELECT emp_no, department, salary,
+NTILE(4) OVER(PARTITION BY department ORDER BY salary DESC) AS dept_salary_quartile,
+NTILE(4) OVER(ORDER BY salary DESC) AS salary_quartile
+FROM employees;
+
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    FIRST_VALUE(emp_no) OVER(PARTITION BY department ORDER BY salary DESC) as highest_paid_dept,
+    FIRST_VALUE(emp_no) OVER(ORDER BY salary DESC) as highest_paid_overall
+FROM employees;
+
+-- LEAD and LAG 
+
+SELECT emp_no,department,salary,
+salary - LAG(salary) OVER(ORDER BY salary DESC) as salary_diff
+FROM employees;
+ 
+SELECT emp_no,department,salary,
+salary - LAG(salary) OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_diff
+FROM employees;

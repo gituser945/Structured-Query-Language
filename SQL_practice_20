@@ -1,0 +1,39 @@
+/*----------------------- DAY 21 --------------------------*/
+
+-- Problem
+
+USE leetcode;
+
+Create table If Not Exists Users (user_id int, name varchar(30), mail varchar(50));
+Truncate table Users;
+insert into Users (user_id, name, mail) values ('1', 'Winston', 'winston@leetcode.com');
+insert into Users (user_id, name, mail) values ('2', 'Jonathan', 'jonathanisgreat');
+insert into Users (user_id, name, mail) values ('3', 'Annabelle', 'bella-@leetcode.com');
+insert into Users (user_id, name, mail) values ('4', 'Sally', 'sally.come@leetcode.com');
+insert into Users (user_id, name, mail) values ('5', 'Marwan', 'quarz#2020@leetcode.com');
+insert into Users (user_id, name, mail) values ('6', 'David', 'david69@gmail.com');
+insert into Users (user_id, name, mail) values ('7', 'Shapiro', '.shapo@leetcode.com');
+
+SELECT * FROM users;
+
+SELECT * FROM users WHERE RIGHT(mail,13) = '@leetcode.com'
+AND LEFT(mail,LENGTH(mail)-13) RLIKE '^[A-Za-z][A-Za-z0-9._-]*$';
+
+SELECT * FROM users WHERE mail RLIKE '^[A-Za-z][A-Za-z0-9._-]*$';
+
+
+Create table If Not Exists Weather (id int, recordDate date, temperature int);
+Truncate table Weather;
+insert into Weather (id, recordDate, temperature) values ('1', '2015-01-01', '10');
+insert into Weather (id, recordDate, temperature) values ('2', '2015-01-02', '25');
+insert into Weather (id, recordDate, temperature) values ('3', '2015-01-03', '20');
+insert into Weather (id, recordDate, temperature) values ('4', '2015-01-04', '30');
+
+SELECT * FROM weather;
+
+SELECT id FROM
+(
+    SELECT W1.id,W1.recordDate,W1.temperature FROM weather AS W1,weather AS W2
+    WHERE W1.recordDate = DATE_ADD(W2.recordDate,INTERVAL 1 DAY)
+    AND W1.temperature > W2.temperature
+) subquery
